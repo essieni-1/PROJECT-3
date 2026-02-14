@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/Users/iyenessien/Downloads/LCD_display_starter_code-main/build/CMakeFiles/bootloader
+/Users/iyenessien/Downloads/LCD_display_starter_code-main/build/CMakeFiles/bootloader.rule
+/Users/iyenessien/Downloads/LCD_display_starter_code-main/build/CMakeFiles/bootloader-complete.rule
+/Users/iyenessien/Downloads/LCD_display_starter_code-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/Users/iyenessien/Downloads/LCD_display_starter_code-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/Users/iyenessien/Downloads/LCD_display_starter_code-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/Users/iyenessien/Downloads/LCD_display_starter_code-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/Users/iyenessien/Downloads/LCD_display_starter_code-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/Users/iyenessien/Downloads/LCD_display_starter_code-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/Users/iyenessien/Downloads/LCD_display_starter_code-main/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

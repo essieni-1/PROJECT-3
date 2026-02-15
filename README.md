@@ -27,11 +27,10 @@ Summary of Testing Results:
 
 ### Subsystem 1: Safety & Ignition Control
 
-
 | Behavior | Test Process | Result |
 | --- | --- | --- |
-Wecome message                | Driver sits in their seat                        |  Screen shows "Welcome to enhanced alarm system model 218-W26" 
-Ready-to-start indication    | Occupy both seats and buckle both belts  |    Green LED lit up once all 4 conditions were met
+Driver seat detection         | Press the driver seat button     |           Terminal prints "Welcome to enhanced alarm system model 218-W26"
+Passenger seat detection      | Toggled passenger seat input via button and observed system response |           Pass
 Driver seatbelt detection     | Simulated belt fastened and unfastened states via button            |           Pass
 Passenger seatbelt detection  | Simulated belt fastened and unfastened states via button            |           Pass
 Ready-to-start indication     | Checked green LED when all safety conditions were met     |           Pass
@@ -40,38 +39,3 @@ Error message when unsafe     | Read terminal after pressing any combination of 
 Engine start when safe        | Pressed ignition button with all conditions met           |           Pass
 Engine-on indication          | Checked red and green LEDs when ignition button pressed   | Pass
 Engine stop                   | Pressed ignition button while engine was running          |           Pass
-
-
-
-
-Ready-to-start indication	
-Occupy both seats and buckle both belts 
-
-Green LED turns on 
-
-Green LED lit up once all 4 conditions were met
-Ignition inhibited when unsafe	
-Press start button while a belt is unbuckled 
-
-Alarm buzzer sounds 
-
-Buzzer sounded as intended
-Error messages when unsafe	
-Press start button while a belt is unbuckled 
-
-Screen shows "Ignition inhibited" and reasons 
-
-Display correctly listed specific missing safety steps
-Engine start when safe	
-Press start button with green LED on 
-
-Green LED turns off; Blue LED turns on 
-
-Lights switched correctly upon successful start
-Engine-on indication	
-Press start button with all conditions met 
-
-Screen displays "Engine started" 
-
-"Engine started" appeared on the display
-Engine stop	Press start button while engine is running	Blue LED turns off and system resets	System returned to standby mode and turned off lights

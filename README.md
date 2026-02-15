@@ -30,12 +30,11 @@ Summary of Testing Results:
 | Behavior | Test Process | Result |
 | --- | --- | --- |
 Driver seat detection         | Press the driver seat button     |           Terminal prints "Welcome to enhanced alarm system model 218-W26"
-Passenger seat detection      | Toggled passenger seat input via button and observed system response |           Pass
-Driver seatbelt detection     | Simulated belt fastened and unfastened states via button            |           Pass
-Passenger seatbelt detection  | Simulated belt fastened and unfastened states via button            |           Pass
-Ready-to-start indication     | Checked green LED when all safety conditions were met     |           Pass
-Ignition inhibited when unsafe| Pressed ignition button with missing safety conditions    |           Pass
-Error message when unsafe     | Read terminal after pressing any combination of buttons plus ignition | Pass
-Engine start when safe        | Pressed ignition button with all conditions met           |           Pass
-Engine-on indication          | Checked red and green LEDs when ignition button pressed   | Pass
-Engine stop                   | Pressed ignition button while engine was running          |           Pass
+Passenger seat detection      | Press the passenger seat button |       
+Driver seatbelt detection     | Press the driver seatbelt button           |           Pass
+Passenger seatbelt detection  | Press the passenger seat button           |           Pass
+Ready-to-start indication     | Press all four buttons (driver seat, passenger seat, driver seatblet and passenger seatbelt)    |       Green LED lights up
+Ignition inhibited when unsafe| Pressed ignition button with missing safety conditions    |        Buzzer sounds 
+Error message when unsafe     | Pressed ignition button with missing safety conditions | Screen shows "Ignition inhibited" and reasons
+Engine start when safe and its indication        | Pressed ignition button with all conditions met           |         Red LED lights up
+Engine stop                   | Press ignition button again when engine is already running         |    Red LED turns off, system resets and terminal prints "Engine stop"

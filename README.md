@@ -30,9 +30,9 @@ Summary of Testing Results:
 | Behavior | Test Process | Result |
 | --- | --- | --- |
 Driver seat detection         | Press the driver seat button     |           Terminal prints "Welcome to enhanced alarm system model 218-W26"
-Passenger seat detection      | Press the passenger seat button |       
-Driver seatbelt detection     | Press the driver seatbelt button           |           Pass
-Passenger seatbelt detection  | Press the passenger seat button           |           Pass
+Passenger seat detection      | Press the passenger seat button |         One condition for ready to start is met 
+Driver seatbelt detection     | Press the driver seatbelt button           |             One condition for ready to start is met
+Passenger seatbelt detection  | Press the passenger seat button           |           One condition for ready to start is met 
 Ready-to-start indication     | Press all four buttons (driver seat, passenger seat, driver seatblet and passenger seatbelt)    |       Green LED lights up
 Ignition inhibited when unsafe| Pressed ignition button with missing safety conditions    |        Buzzer sounds 
 Error message when unsafe     | Pressed ignition button with missing safety conditions | Screen shows "Ignition inhibited" and reasons

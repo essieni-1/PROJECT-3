@@ -31,7 +31,7 @@ Summary of Testing Results:
 | Behavior | Test Process | Result |
 | --- | --- | --- |
 Wecome message                | Driver sits in their seat                        |  Screen shows "Welcome to enhanced alarm system model 218-W26" 
-Passenger seat detection      | Toggled passenger seat input via button and observed system response |           Pass
+Ready-to-start indication    | Occupy both seats and buckle both belts  |    Green LED lit up once all 4 conditions were met
 Driver seatbelt detection     | Simulated belt fastened and unfastened states via button            |           Pass
 Passenger seatbelt detection  | Simulated belt fastened and unfastened states via button            |           Pass
 Ready-to-start indication     | Checked green LED when all safety conditions were met     |           Pass
@@ -43,15 +43,7 @@ Engine stop                   | Pressed ignition button while engine was running
 
 
 
-Note: The "Result" column describes the successful system response for each behavior.
 
-Behavior	Test Process	Expected Result	Result (Verification)
-Welcome message	
-Driver sits in their seat 
-
-Screen shows "Welcome to enhanced alarm system model 218-W26" 
-
-Message appeared correctly on the display
 Ready-to-start indication	
 Occupy both seats and buckle both belts 
 

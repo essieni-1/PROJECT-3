@@ -38,3 +38,14 @@ Ignition inhibited when unsafe| Pressed ignition button with missing safety cond
 Error message when unsafe     | Pressed ignition button with missing safety conditions | Screen shows "Ignition inhibited" and reasons
 Engine start when safe and its indication        | Pressed ignition button with all conditions met           |         Red LED lights up
 Engine stop                   | Press ignition button again when engine is already running         |    Red LED turns off, system resets and terminal prints "Engine stop"
+
+### Subsystem 2: Windshield Wiper Control
+
+| Behavior | Test Process | Result |
+| --- | --- | --- |
+Wiper OFF mode        | Set selector to OFF    |          Wipers stay at 0 degrees
+Wiper HI mode     | Set selector to HI|        Wipers move fast at 25 RPM
+Wiper LO mode    | Set selector to LO         |             Wipers move at 10 RPM
+ntermittent (INT) mode| Set selector to INT          |          Wipers sweep once, then pause at 0 degrees
+Driver-selected delay   | Adjust delay setting in INT mode  |     Wipers pause for 1, 3, or 5 seconds
+LCD status display| Change wiper modes  |        Screen updates to show current wiper setting

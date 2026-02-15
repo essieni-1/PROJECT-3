@@ -1,7 +1,7 @@
 # PROJECT-3: Enhanced Vehicle Alarm & Wiper Control System
 Team Members: Iyene Essien & Heidi Garcia
 
-# System Behavior
+System Behavior
 ---------------------------------------------------------------------------------------------------------------------------
 This project is an upgrade for Driver's Education vehicles to ensure student drivers are following safety rules. The system basically acts like a smart key. It will not let you start the car unless the driver ans passenger are both sitting in their seats and have their seatbelts buckled.
 Once the car has safely started, the system enables the windshield wipers. These wipers work just like a real car with four settings: Off, Low speed, High speed and Intermittent (where the wipers pause for 1, 3, or 5 seconds before wiping again). All of this information—like "Engine Started" or the current wiper speed—is shown on a small screen for the driver to see.

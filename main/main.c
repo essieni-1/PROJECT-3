@@ -275,7 +275,7 @@ void app_main(void) {
                 if(short_delay){
                     hd44780_puts(&lcd, "Short");
                 }
-                else if(med_delay) {
+                else if(medium_delay) {
                     hd44780_puts(&lcd, "Medium");
                 }
                 else if(long_delay) {

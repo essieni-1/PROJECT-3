@@ -208,7 +208,7 @@ void app_main(void) {
         wipe_high = mode_select <= HIGH_THRESHOLD && mode_select >= 0 && ignition;
         //update wiper delay
         short_delay = speed_select >= SHORT_THRESHOLD && speed_select < MED_THRESHOLD;
-        med_delay = speed_select >= MED_THRESHOLD && speed_select < LONG_THRESHOLD;
+        medium_delay = speed_select >= MED_THRESHOLD && speed_select < LONG_THRESHOLD;
         long_delay = speed_select >= LONG_THRESHOLD && speed_select <= MAX_THRESHOLD;
 
         //upate can_start variable based on current button states

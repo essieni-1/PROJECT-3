@@ -24,7 +24,7 @@ Choice: If the car won't start, the system doesn't just stay quiet. It sounds a 
 Reasoning: This helps a student driver quickly understand what they did wrong so they can fix it and try again. 
 
 
-Summary of Testing Results:
+Summary of Testing Results
 ---------------------------------------------------------------------------------------------------------------------------
 
 ### Subsystem 1: Safety & Ignition Control

@@ -18,10 +18,10 @@
 #define LOW_BEAMS GPIO_NUM_16
 
 //inputs
-#define DRIVER_OCC GPIO_NUM_4
+#define DRIVER_SEAT GPIO_NUM_4
 #define DRIVER_BELT GPIO_NUM_5
-#define PASS_OCC GPIO_NUM_7
-#define PASS_BELT GPIO_NUM_15
+#define PASSENGER_SEAT GPIO_NUM_7
+#define PASSENGER_BELT GPIO_NUM_15
 #define IGNITION GPIO_NUM_10
 #define BUZZER GPIO_NUM_12
 
@@ -38,9 +38,9 @@
 #define LEDC_MODE               LEDC_LOW_SPEED_MODE
 #define LEDC_OUTPUT_IO          (19)
 #define LEDC_CHANNEL            LEDC_CHANNEL_0
-#define LEDC_DUTY_RES           LEDC_TIMER_13_BIT // Set duty resolution to 13 bits
+#define LEDC_DUTY_RES           LEDC_TIMER_13_BIT // set duty resolution to 13 bits
 
-//Set the PWM signal frequency required by servo motor
+// set the PWM signal frequency required by servo motor
 #define LEDC_FREQUENCY          (50) // Frequency in Hertz. 
 
 //min, max, and true full max angles for wipers
@@ -48,7 +48,7 @@
 #define WIPERS_MAXIMUM              (620) //90 degrees
 #define WIPERS_FULL_MAXIMUM         (965) //180 degrees
 
-//Setting windshield wiper select thresholds
+// setting windshield wiper select thresholds
 
 // mode select
 #define OFF_THRESHOLD              3170
@@ -56,7 +56,7 @@
 #define LOW_THRESHOLD              1585
 #define HIGH_THRESHOLD             793
 
-//sleectig the speed
+//selecting the speed
 #define SHORT_THRESHOLD            0
 #define MED_THRESHOLD              1057
 #define LONG_THRESHOLD             2113
@@ -71,13 +71,13 @@ volatile bool wipe_off;
 volatile bool wipe_int;
 volatile bool wipe_low;
 volatile bool wipe_high;
-volatile bool short_del;
-volatile bool med_del;
-volatile bool long_del;
+volatile bool short_delay;
+volatile bool medium_delay;
+volatile bool long_delay;
 
-int short_del_ms = 1000;
-int med_del_ms = 3000;
-int long_del_ms = 5000;
+int short_delay_ms = 1000;
+int medium_delay_ms = 3000;
+int long_delay_ms = 5000;
 
 //defining steps for low and high speed for wipers
 int low_steps = 65;
@@ -87,7 +87,7 @@ int high_steps = 30;
 int stack_depth = 4096;
 int wiper_task_priority = 5;
 
-//function declarations
+// functions 
 void perform_wipe_cycle(int steps);
 void wiper_control_task(void *pvParameters);
 static void ledc_init(void);
@@ -98,13 +98,13 @@ static void buzzer_init(void);
 
 void app_main(void) {
 
-    //initializing components
+    // initializing components
     ledc_init();
     leds_init();
     buttons_init();
     buzzer_init();
 
-    //ADC configuration
+    // ADC configuration
     adc_oneshot_unit_init_cfg_t init_config1 = {
         .unit_id = ADC_UNIT_1,
     };                                                  // unit configuration
@@ -116,9 +116,9 @@ void app_main(void) {
         .bitwidth = BITWIDTH
     }; 
     
-    adc_oneshot_config_channel                          // configure the Potentiometer Channel
+    adc_oneshot_config_channel                          // configure the potentiometer channel
     (adc1_handle, POT_ADC_CHAN_1, &config);
-    adc_oneshot_config_channel                          // configure the Light Sensor Channel
+    adc_oneshot_config_channel                          // configure the light sensor channel
     (adc1_handle, POT_ADC_CHAN_2, &config);
 
     adc_cali_curve_fitting_config_t pot_cali_config_1 = { //configuring curve fitting for the potentiometer
@@ -134,13 +134,13 @@ void app_main(void) {
         .atten = ADC_ATTEN,
         .bitwidth = BITWIDTH
     };
-    adc_cali_handle_t adc1_cali_chan_handle;            // Calibration handle
-    adc_cali_create_scheme_curve_fitting                // Populate cal handle
+    adc_cali_handle_t adc1_cali_chan_handle;            // calibration handle
+    adc_cali_create_scheme_curve_fitting                // populate calibration handle
     (&pot_cali_config_2, &adc1_cali_chan_handle);
-    adc_cali_create_scheme_curve_fitting                // Populate cal handle
+    adc_cali_create_scheme_curve_fitting                // populate calibration handle
     (&pot_cali_config_1, &adc1_cali_chan_handle);
 
-    //LCD Config
+    // LCD configuration
     hd44780_t lcd =
     {
         .write_cb = NULL,
@@ -158,19 +158,19 @@ void app_main(void) {
     };
     ESP_ERROR_CHECK(hd44780_init(&lcd));
 
-    //creates wiper task
+    //creation of wiper task
     xTaskCreate(wiper_control_task, "Wiper_Task", stack_depth, NULL, wiper_task_priority, NULL);
 
-    //defining variables
-    bool driver_occupied_prev = false;
-    bool driver_occupied = false;
+    // avriable definitions for main loop 
+    bool driver_seat_prev = false;
+    bool driver_seat = false;
     bool driver_belt = false;
-    bool pass_occupied = false;
-    bool pass_belt = false;
+    bool passenger_seat = false;
+    bool passenger_belt = false;
     bool ignition_button_prev = false;
     bool ignition_button = false;
     bool ignition = false;
-    bool can_start = false;
+    bool ready = false;
     
     
     //main code loop
@@ -178,7 +178,7 @@ void app_main(void) {
     while(true) {
         int pot_2_bits;                                   // light sensor ADC reading (bits)
         adc_oneshot_read
-        (adc1_handle, POT_ADC_CHAN_2, &pot_2_bits);          // Read ADC bits
+        (adc1_handle, POT_ADC_CHAN_2, &pot_2_bits);          // read the ADC bits
        
         int speed_select;                                     // ADC reading (mV)
         adc_cali_raw_to_voltage
@@ -186,18 +186,18 @@ void app_main(void) {
 
         int pot_1_bits;                                   // ADC reading (bits)
         adc_oneshot_read
-        (adc1_handle, POT_ADC_CHAN_1, &pot_1_bits);          // Read ADC bits
+        (adc1_handle, POT_ADC_CHAN_1, &pot_1_bits);          // read the ADC bits
        
         int mode_select;                                     // ADC reading (mV)
         adc_cali_raw_to_voltage
         (adc1_cali_chan_handle, pot_1_bits, &mode_select);
 
         //update button states
-        driver_occupied_prev = driver_occupied;
-        driver_occupied = gpio_get_level(DRIVER_OCC) == 0;
+        driver_seat_prev = driver_seat;
+        driver_seat = gpio_get_level(DRIVER_SEAT) == 0;
         driver_belt = gpio_get_level(DRIVER_BELT) == 0;
-        pass_occupied = gpio_get_level(PASS_OCC) == 0;
-        pass_belt = gpio_get_level(PASS_BELT) == 0;
+        passenger_seat = gpio_get_level(PASSENGER_SEAT) == 0;
+        passenger_belt = gpio_get_level(PASSENGER_BELT) == 0;
         ignition_button_prev = ignition_button;
         ignition_button = gpio_get_level(IGNITION) == 0;
 
@@ -207,20 +207,20 @@ void app_main(void) {
         wipe_low = mode_select <= LOW_THRESHOLD && mode_select > HIGH_THRESHOLD && ignition;
         wipe_high = mode_select <= HIGH_THRESHOLD && mode_select >= 0 && ignition;
         //update wiper delay
-        short_del = speed_select >= SHORT_THRESHOLD && speed_select < MED_THRESHOLD;
-        med_del = speed_select >= MED_THRESHOLD && speed_select < LONG_THRESHOLD;
-        long_del = speed_select >= LONG_THRESHOLD && speed_select <= MAX_THRESHOLD;
+        short_delay = speed_select >= SHORT_THRESHOLD && speed_select < MED_THRESHOLD;
+        med_delay = speed_select >= MED_THRESHOLD && speed_select < LONG_THRESHOLD;
+        long_delay = speed_select >= LONG_THRESHOLD && speed_select <= MAX_THRESHOLD;
 
         //upate can_start variable based on current button states
-        can_start = driver_occupied && driver_belt && pass_occupied && pass_belt;
+        ready = driver_seat && driver_belt && passenger_seat && passenger_belt;
 
         //welcome message
-        if (driver_occupied && !driver_occupied_prev) { //if driver seat is occupied
+        if (driver_seat && !driver_seat_prev) { //if driver seat is occupied
             printf("Welcome to enhanced alarm system model 218-W25\n"); //print welcome message
         }
 
         //green LED
-        if (can_start && !ignition) { //if conditions to start the engine are met
+        if (ready && !ignition) { //if conditions to start the engine are met
             gpio_set_level(GREEN_LED, 1); //turn green LED on
         }
         //if conditions to start the engine are not met
@@ -229,7 +229,7 @@ void app_main(void) {
         }
 
         if (ignition_button && !ignition_button_prev) {
-            if(can_start && !ignition) { //if engine is not on and ignition conditions are met
+            if(ready && !ignition) { //if engine is not on and ignition conditions are met
                 gpio_set_level(GREEN_LED, 0); //switch LEDS and print ignition message
                 gpio_set_level(RED_LED, 1);
                 printf("Engine Started\n");
@@ -245,16 +245,16 @@ void app_main(void) {
             else {      
                 gpio_set_level(BUZZER, 1);      //activate the buzzer
                 printf("Ignition Inhibited\n"); //print ignition failure message
-                if (!driver_occupied) { 
+                if (!driver_seat) { 
                 printf("Driver seat not occupied\n");
                 }
                 if (!driver_belt) {
                     printf("Driver seatbelt not fastened\n");
                 }
-                if (!pass_occupied) {
+                if (!passenger_seat) {
                     printf("Passenger seat not occupied\n");
                 }
-                if (!pass_belt) {
+                if (!passenger_belt) {
                     printf("Passenger seatbelt not fastened\n");
                 }
                 vTaskDelay(BUZZER_TIME / portTICK_PERIOD_MS);
@@ -272,13 +272,13 @@ void app_main(void) {
             else if(wipe_int) {
                 hd44780_puts(&lcd, "Intermittent");
                 hd44780_gotoxy(&lcd, 0, 1);
-                if(short_del){
+                if(short_delay){
                     hd44780_puts(&lcd, "Short");
                 }
-                else if(med_del) {
+                else if(med_delay) {
                     hd44780_puts(&lcd, "Medium");
                 }
-                else if(long_del) {
+                else if(long_delay) {
                     hd44780_puts(&lcd, "Long");
                 }
             }
@@ -290,7 +290,7 @@ void app_main(void) {
             }
         }
         
-        vTaskDelay(  LOOP_DELAY_MS / portTICK_PERIOD_MS); //loop delay to prevent bouncy inputs
+        vTaskDelay(LOOP_DELAY_MS / portTICK_PERIOD_MS); //loop delay to prevent bouncy inputs
     }
 }
 //wiper task handles the wipers, sets them to the proper mode
@@ -305,10 +305,10 @@ void wiper_control_task(void *pvParameters) {
         else if(wipe_int) {
             perform_wipe_cycle(low_steps);
 
-            int delay_ms = short_del_ms;
-            if(short_del) delay_ms = short_del_ms;
-            if(med_del) delay_ms = med_del_ms;
-            if(long_del) delay_ms = long_del_ms;
+            int delay_ms = short_delay_ms;
+            if(short_delay) delay_ms = short_delay_ms;
+            if(medium_delay) delay_ms = medium_delay_ms;
+            if(long_delay) delay_ms = long_delay_ms;
 
             vTaskDelay(delay_ms/portTICK_PERIOD_MS);
         }
@@ -348,7 +348,7 @@ static void ledc_init(void) {
 static void buttons_init(void) {
     //Configuring DRIVER_OCC
     gpio_config_t driver_occ_io_conf = {
-        .pin_bit_mask = (1ULL << DRIVER_OCC), 
+        .pin_bit_mask = (1ULL << DRIVER_SEAT), 
         .mode = GPIO_MODE_INPUT,          
         .pull_up_en = GPIO_PULLUP_ENABLE, 
         .pull_down_en = GPIO_PULLDOWN_DISABLE, 
@@ -368,7 +368,7 @@ static void buttons_init(void) {
 
     //Configuring PASS_OCC
     gpio_config_t pass_occ_io_conf = {
-        .pin_bit_mask = (1ULL << PASS_OCC), 
+        .pin_bit_mask = (1ULL << PASSENGER_SEAT), 
         .mode = GPIO_MODE_INPUT,          
         .pull_up_en = GPIO_PULLUP_ENABLE, 
         .pull_down_en = GPIO_PULLDOWN_DISABLE, 
@@ -378,7 +378,7 @@ static void buttons_init(void) {
 
     //Configuring PASS_BELT
     gpio_config_t pass_belt_io_conf = {
-        .pin_bit_mask = (1ULL << PASS_BELT), 
+        .pin_bit_mask = (1ULL << PASSENGER_BELT), 
         .mode = GPIO_MODE_INPUT,          
         .pull_up_en = GPIO_PULLUP_ENABLE, 
         .pull_down_en = GPIO_PULLDOWN_DISABLE, 
